@@ -1,8 +1,6 @@
 #include <iostream>
 #include <string>
-#include <ctime>
 #include <vector>
-#include <memory>
 
 #include "iterable.h"
 
@@ -11,30 +9,18 @@ using namespace std;
 struct test {
   std::vector<int> vec;
 
-  MAKE_ITERABLE(int);
-  typedef iterator_tpl<test, int, int> iterator;
-
-  iterator begin() { return iterator::begin(this); }
-  iterator end() { return iterator::end(this); }
+  SETUP_ITERATOR(test, int, int);
 };
 
-// Specialize the requied functions:
-template<>
-void test::iterator::next() {
-  value = &ref->vec[++state];
-}
-
-template<>
-void test::iterator::begin() {
-  state = 0;
-  value = &ref->vec[0];
-}
-
-template<>
-void test::iterator::end() {
-  state = ref->vec.size();
-  value = &ref->vec[state];
-}
+// Specialize the required functions:
+template<> // Change state to next:
+inline void test::iterator::next() { ++state; }
+template<> // Set state to begin()
+inline void test::iterator::begin() { state = 0; }
+template<> // Set state to end()
+inline void test::iterator::end() { state = ref->vec.size(); }
+template<> // Return current value:
+inline int& test::iterator::get() { return ref->vec[state]; }
 
 int main() {
   test a;

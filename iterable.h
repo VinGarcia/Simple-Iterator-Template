@@ -1,10 +1,13 @@
 
-#define MAKE_ITERABLE(T) \
+#define SETUP_ITERATOR(C, T, S) \
   typedef ptrdiff_t difference_type;\
   typedef size_t size_type;\
   typedef T value_type;\
   typedef T* pointer;\
-  typedef T& reference;
+  typedef T& reference;\
+  typedef iterator_tpl<test, int, int> iterator;\
+  iterator begin() { return iterator::begin(this); }\
+  iterator end() { return iterator::end(this); }
 
 // C - The container type
 // T - The content type
@@ -14,25 +17,20 @@ struct iterator_tpl {
   // Keeps a reference to the container:
   C* ref;
 
-  // Keeps a reference to the current value:
-  T* value;
-
   S state;
 
   // Set iterator to next() state:
-  // (Set value to 0 if next is end state)
   void next();
-  // Initialize `value` to first state:
+  // Initialize iterator to first state:
   void begin();
-  // Initialize `value` to end state:
+  // Initialize iterator to end state:
   void end();
+  // Returns current `value`
+  T& get();
 
  public:
   static iterator_tpl begin(C* ref) { return iterator_tpl(ref, 1); }
   static iterator_tpl end(C* ref) { return iterator_tpl(ref, 0); }
-
-  static iterator_tpl begin(const C* ref) { return iterator_tpl(ref, 1); }
-  static iterator_tpl end(const C* ref) { return iterator_tpl(ref, 0); }
 
  protected:
   iterator_tpl(C* ref, int state) : ref(ref) {
@@ -44,9 +42,9 @@ struct iterator_tpl {
   }
 
  public:
-  T& operator*() { return *value; }
+  T& operator*() { return get(); }
   iterator_tpl& operator++() { next(); return *this; }
-  bool operator!=(const iterator_tpl& other) const {
-    return value != other.value;
+  bool operator!=(iterator_tpl& other) {
+    return ref != other.ref || get() != other.get();
   }
 };
