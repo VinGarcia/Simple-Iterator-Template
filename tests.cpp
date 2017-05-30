@@ -1,38 +1,41 @@
 #include <iostream>
-#include <vector>
 
+#include <vector>
 #include "iterator_tpl.h"
 
-struct test {
-  std::vector<int> vec;
+struct MyContainer {
+  std::vector<std::string> vec;
 
   struct it_state {
     int pos;
-    inline void next(const test* ref) { ++pos; }
-    inline void begin(const test* ref) { pos = 0; }
-    inline void end(const test* ref) { pos = ref->vec.size(); }
-    inline int& get(test* ref) { return ref->vec[pos]; }
-    inline const int& get(const test* ref) { return ref->vec[pos]; }
+    inline void next(const MyContainer* ref) { ++pos; }
+    inline void begin(const MyContainer* ref) { pos = 0; }
+    inline void end(const MyContainer* ref) { pos = ref->vec.size(); }
+    inline std::string& get(MyContainer* ref) { return ref->vec[pos]; }
+    inline const std::string& get(const MyContainer* ref) { return ref->vec[pos]; }
   };
-  SETUP_ITERATORS(test, int, it_state);
+  SETUP_ITERATORS(MyContainer, std::string, it_state);
 };
 
 int main() {
-  test a1;
-  a1.vec.push_back(3);
-  a1.vec.push_back(4);
-  a1.vec.push_back(5);
+  MyContainer c1;
+  c1.vec.push_back("val1");
+  c1.vec.push_back("val2");
+  c1.vec.push_back("val3");
 
+  std::cout << std::endl;
   std::cout << "mutable iterator:" << std::endl;
-  for (int b : a1) {
-    std::cout << b << std::endl;
+  for (std::string& str : c1) {
+    std::cout << str << std::endl; // val1 val2 val3
   }
 
+  std::cout << std::endl;
   std::cout << "const iterator:" << std::endl;
-  const test& a2 = a1;
-  for (int b : a2) {
-    std::cout << b << std::endl;
+  const MyContainer& c2 = c1;
+  for (const std::string& str : c2) {
+    std::cout << str << std::endl; // val1 val2 val3
   }
+  std::cout << std::endl;
 
   return 0;
 }
