@@ -10,7 +10,7 @@
 // T - The content type
 // S - The state keeping structure
 template <class C, typename T, class S>
-struct iterable_it {
+struct iterator_tpl {
   // Keeps a reference to the container:
   C* ref;
 
@@ -28,11 +28,14 @@ struct iterable_it {
   void end();
 
  public:
-  static iterable_it begin(C* ref) { return iterable_it(ref, 1); }
-  static iterable_it end(C* ref) { return iterable_it(ref, 0); }
+  static iterator_tpl begin(C* ref) { return iterator_tpl(ref, 1); }
+  static iterator_tpl end(C* ref) { return iterator_tpl(ref, 0); }
+
+  static iterator_tpl begin(const C* ref) { return iterator_tpl(ref, 1); }
+  static iterator_tpl end(const C* ref) { return iterator_tpl(ref, 0); }
 
  protected:
-  iterable_it(C* ref, int state) : ref(ref) {
+  iterator_tpl(C* ref, int state) : ref(ref) {
     if (state) {
       begin();
     } else {
@@ -42,8 +45,8 @@ struct iterable_it {
 
  public:
   T& operator*() { return *value; }
-  iterable_it& operator++() { next(); return *this; }
-  bool operator!=(const iterable_it& other) const {
+  iterator_tpl& operator++() { next(); return *this; }
+  bool operator!=(const iterator_tpl& other) const {
     return value != other.value;
   }
 };

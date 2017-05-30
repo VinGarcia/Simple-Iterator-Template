@@ -12,7 +12,7 @@ struct test {
   std::vector<int> vec;
 
   MAKE_ITERABLE(int);
-  typedef iterable_it<test, int, int> iterator;
+  typedef iterator_tpl<test, int, int> iterator;
 
   iterator begin() { return iterator::begin(this); }
   iterator end() { return iterator::end(this); }
