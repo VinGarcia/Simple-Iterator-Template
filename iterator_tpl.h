@@ -125,6 +125,6 @@ struct const_iterator_tpl {
   iterator end() { return iterator::end(this); }
 
 #define _SETUP_CONST_ITERATOR(C, T, S) \
-  typedef const_iterator_tpl<test, int, it_state> const_iterator;\
+  typedef const_iterator_tpl<C, T, S> const_iterator;\
   const_iterator begin() const { const_iterator::begin(this); }\
   const_iterator end() const { const_iterator::end(this); }
