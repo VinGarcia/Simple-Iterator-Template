@@ -11,21 +11,29 @@ struct test {
 
   struct it_state {
     int pos;
-    inline void next(test* ref) { ++pos; }
-    inline void begin(test* ref) { pos = 0; }
-    inline void end(test* ref) { pos = ref->vec.size(); }
+    inline void next(const test* ref) { ++pos; }
+    inline void begin(const test* ref) { pos = 0; }
+    inline void end(const test* ref) { pos = ref->vec.size(); }
     inline int& get(test* ref) { return ref->vec[pos]; }
+    inline const int& get(const test* ref) { return ref->vec[pos]; }
   };
-  SETUP_ITERATOR(test, int, it_state);
+  SETUP_ITERATORS(test, int, it_state);
 };
 
 int main() {
-  test a;
-  a.vec.push_back(3);
-  a.vec.push_back(4);
-  a.vec.push_back(5);
+  test a1;
+  a1.vec.push_back(3);
+  a1.vec.push_back(4);
+  a1.vec.push_back(5);
 
-  for (int b : a) {
+  std::cout << "mutable iterator:" << std::endl;
+  for (int b : a1) {
+    std::cout << b << std::endl;
+  }
+
+  std::cout << "const iterator:" << std::endl;
+  const test& a2 = a1;
+  for (int b : a2) {
     std::cout << b << std::endl;
   }
 
