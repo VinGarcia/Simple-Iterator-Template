@@ -5,44 +5,24 @@ Provides a header-only C++ iterator template that is easy to adapt for any custo
 ## Usage:
 
 ```C++
+#include <iostream>
 #include <vector>
 
 #include "iterable.h"
 
-using namespace std;
-
 struct test {
   std::vector<int> vec;
 
-  // Add the required typedefs to your container:
-  MAKE_ITERABLE(int);
-  // Add the non-const version of your iterator for class `test`:
-  typedef iterator_tpl<test, // Container's type
-                       int,  // Content's type
-                       int   // type of `state` variable, used to specialize the template below.
-                       > iterator;
-
-  iterator begin() { return iterator::begin(this); }
-  iterator end() { return iterator::end(this); }
+  struct it_state {
+    int pos;
+    inline void next(const test* ref) { ++pos; }
+    inline void begin(const test* ref) { pos = 0; }
+    inline void end(const test* ref) { pos = ref->vec.size(); }
+    inline int& get(test* ref) { return ref->vec[pos]; }
+    inline const int& get(const test* ref) { return ref->vec[pos]; }
+  };
+  SETUP_ITERATORS(test, int, it_state);
 };
-
-// Specialize the 3 required functions:
-template<>
-void test::iterator::next() {
-  value = &ref->vec[++state];
-}
-
-template<>
-void test::iterator::begin() {
-  state = 0;
-  value = &ref->vec[0];
-}
-
-template<>
-void test::iterator::end() {
-  state = ref->vec.size();
-  value = &ref->vec[state];
-}
 ```
 
 Then it is easy to use the container as a normal iterator, e.g.:
@@ -54,9 +34,18 @@ int main() {
   a.vec.push_back(4);
   a.vec.push_back(5);
 
-  for (int b : a) {
+  std::cout << "mutable iterator:" << std::endl;
+  for (int b : a1) {
     std::cout << b << " "; // 3 4 5
   }
+  std::cout << std::endl;
+
+  std::cout << "const iterator:" << std::endl;
+  const test& a2 = a1;
+  for (int b : a2) {
+    std::cout << b << " "; // 3 4 5
+  }
+  std::cout << std::endl;
 
   return 0;
 }

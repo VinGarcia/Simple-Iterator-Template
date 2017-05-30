@@ -1,10 +1,7 @@
 #include <iostream>
-#include <string>
 #include <vector>
 
 #include "iterable.h"
-
-struct test;
 
 struct test {
   std::vector<int> vec;
