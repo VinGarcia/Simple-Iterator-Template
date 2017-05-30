@@ -26,7 +26,7 @@ struct test {
   iterator end() { return iterator::end(this); }
 };
 
-// Specialize the requied functions:
+// Specialize the 3 required functions:
 template<>
 void test::iterator::next() {
   value = &ref->vec[++state];
