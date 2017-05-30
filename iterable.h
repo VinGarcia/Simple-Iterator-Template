@@ -1,11 +1,11 @@
 
 #define SETUP_ITERATOR(C, T, S) \
-  typedef ptrdiff_t difference_type;\
+  typedef std::ptrdiff_t difference_type;\
   typedef size_t size_type;\
   typedef T value_type;\
   typedef T* pointer;\
   typedef T& reference;\
-  typedef iterator_tpl<test, int, int> iterator;\
+  typedef iterator_tpl<C, T, S> iterator;\
   iterator begin() { return iterator::begin(this); }\
   iterator end() { return iterator::end(this); }
 
@@ -20,13 +20,13 @@ struct iterator_tpl {
   S state;
 
   // Set iterator to next() state:
-  void next();
+  void next() { state.next(ref); }
   // Initialize iterator to first state:
-  void begin();
+  void begin() { state.begin(ref); }
   // Initialize iterator to end state:
-  void end();
+  void end() { state.end(ref); }
   // Returns current `value`
-  T& get();
+  T& get() { return state.get(ref); }
 
  public:
   static iterator_tpl begin(C* ref) { return iterator_tpl(ref, 1); }
