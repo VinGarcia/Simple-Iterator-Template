@@ -6,7 +6,7 @@ Provides a header-only C++ iterator template that is easy to adapt for any custo
 
 - Single header.
 - STL Compliant (needs some improvement).
-- No efficience cost, it is as efficient as it could possible be.
+- No efficience loss, it is as efficient as it could possible be.
 - Really easy to understand.
 - Concise, on simple cases it takes only 9 lines to adapt a container,
   and on more complex cases it takes only a few lines more.
