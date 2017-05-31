@@ -1,4 +1,6 @@
 
+namespace iterator_tpl {
+
 // Use this define to declare both:
 // - `iterator`
 // - `const_iterator`:
@@ -24,7 +26,7 @@
 // T - The content type
 // S - The state keeping structure
 template <class C, typename T, class S>
-struct iterator_tpl {
+struct iterator {
   // Keeps a reference to the container:
   C* ref;
 
@@ -44,11 +46,11 @@ struct iterator_tpl {
   T& get() { return state.get(ref); }
 
  public:
-  static iterator_tpl begin(C* ref) { return iterator_tpl(ref, 1); }
-  static iterator_tpl end(C* ref) { return iterator_tpl(ref, 0); }
+  static iterator begin(C* ref) { return iterator(ref, 1); }
+  static iterator end(C* ref) { return iterator(ref, 0); }
 
  protected:
-  iterator_tpl(C* ref, int state) : ref(ref) {
+  iterator(C* ref, int state) : ref(ref) {
     if (state) {
       begin();
     } else {
@@ -58,8 +60,8 @@ struct iterator_tpl {
 
  public:
   T& operator*() { return get(); }
-  iterator_tpl& operator++() { next(); return *this; }
-  bool operator!=(iterator_tpl& other) {
+  iterator& operator++() { next(); return *this; }
+  bool operator!=(iterator& other) {
     return ref != other.ref || get() != other.get();
   }
 };
@@ -70,7 +72,7 @@ struct iterator_tpl {
 // T - The content type
 // S - The state keeping structure
 template <class C, typename T, class S>
-struct const_iterator_tpl {
+struct const_iterator {
   // Keeps a reference to the container:
   const C* ref;
 
@@ -86,15 +88,15 @@ struct const_iterator_tpl {
   const T& get() { return state.get(ref); }
 
  public:
-  static const_iterator_tpl begin(const C* ref) {
-    return const_iterator_tpl(ref, 1);
+  static const_iterator begin(const C* ref) {
+    return const_iterator(ref, 1);
   }
-  static const_iterator_tpl end(const C* ref) {
-    return const_iterator_tpl(ref, 0);
+  static const_iterator end(const C* ref) {
+    return const_iterator(ref, 0);
   }
 
  protected:
-  const_iterator_tpl(const C* ref, int state) : ref(ref) {
+  const_iterator(const C* ref, int state) : ref(ref) {
     if (state) {
       begin();
     } else {
@@ -104,8 +106,8 @@ struct const_iterator_tpl {
 
  public:
   const T& operator*() { return get(); }
-  const_iterator_tpl& operator++() { next(); return *this; }
-  bool operator!=(const_iterator_tpl& other) {
+  const_iterator& operator++() { next(); return *this; }
+  bool operator!=(const_iterator& other) {
     return ref != other.ref || get() != other.get();
   }
 };
@@ -120,11 +122,13 @@ struct const_iterator_tpl {
   typedef T& reference;
 
 #define _SETUP_MUTABLE_ITERATOR(C, T, S) \
-  typedef iterator_tpl<C, T, S> iterator;\
+  typedef iterator_tpl::iterator<C, T, S> iterator;\
   iterator begin() { return iterator::begin(this); }\
   iterator end() { return iterator::end(this); }
 
 #define _SETUP_CONST_ITERATOR(C, T, S) \
-  typedef const_iterator_tpl<C, T, S> const_iterator;\
+  typedef iterator_tpl::const_iterator<C, T, S> const_iterator;\
   const_iterator begin() const { const_iterator::begin(this); }\
   const_iterator end() const { const_iterator::end(this); }
+
+}  // namespace iterator_tpl
