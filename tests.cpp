@@ -21,7 +21,8 @@ struct MyContainer {
     inline void begin(const MyContainer* ref) { pos = 0; }
     inline void end(const MyContainer* ref) { pos = ref->vec.size(); }
     inline std::string& get(MyContainer* ref) { return ref->vec[pos]; }
-    inline const std::string& get(const MyContainer* ref) const { return ref->vec[pos]; }
+    inline const std::string& get(const MyContainer* ref) { return ref->vec[pos]; }
+    bool cmp(const it_state& s) const { return pos != s.pos; }
   };
   SETUP_ITERATORS(MyContainer, std::string, it_state);
 };

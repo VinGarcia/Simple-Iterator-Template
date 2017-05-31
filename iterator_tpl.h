@@ -60,17 +60,17 @@ struct iterator {
   T& get() { return state.get(ref); }
   // Optional used for const comparisons:
   const T& get() const { return state.get(ref); }
+  bool cmp(const S& s) const { return state.cmp(s); }
 
  public:
-  static iterator begin(C* ref) { return iterator(ref, 1); }
-  static iterator end(C* ref) { return iterator(ref, 0); }
+  static iterator begin(C* ref) { return iterator(ref, 0); }
+  static iterator end(C* ref) { return iterator(ref, 1); }
 
  protected:
-  iterator(C* ref, int state_begin) : ref(ref) {
-    if (state_begin) {
-      begin();
-    } else {
-      end();
+  iterator(C* ref, int initial_state) : ref(ref) {
+    switch (initial_state) {
+    case 0: begin(); break;
+    case 1: end(); break;
     }
   }
 
@@ -85,7 +85,7 @@ struct iterator {
   iterator& operator++() { next(); return *this; }
   iterator operator++(int) { next(); return *this; }
   bool operator!=(const iterator& other) const {
-    return ref != other.ref || &get() != &other.get();
+    return ref != other.ref || cmp(other.state);
   }
   bool operator==(const iterator& other) const {
     return !operator!=(other);
@@ -95,7 +95,7 @@ struct iterator {
 
   // Comparisons between const and normal iterators:
   bool operator!=(const const_iterator<C,T,S>& other) const {
-    return ref != other.ref || &get() != &other.get();
+    return ref != other.ref || cmd(other.state);
   }
   bool operator==(const const_iterator<C,T,S>& other) const {
     return !operator!=(other);
@@ -121,22 +121,22 @@ struct const_iterator {
   // Initialize iterator to end state:
   void end() { state.end(ref); }
   // Returns current `value`
-  const T& get() const { return state.get(ref); }
+  const T& get() { return state.get(ref); }
+  bool cmp(const S& s) const { return state.cmp(s); }
 
  public:
   static const_iterator begin(const C* ref) {
-    return const_iterator(ref, 1);
+    return const_iterator(ref, 0);
   }
   static const_iterator end(const C* ref) {
-    return const_iterator(ref, 0);
+    return const_iterator(ref, 1);
   }
 
  protected:
-  const_iterator(const C* ref, int state_begin) : ref(ref) {
-    if (state_begin) {
-      begin();
-    } else {
-      end();
+  const_iterator(const C* ref, int initial_state) : ref(ref) {
+    switch (initial_state) {
+    case 0: begin(); break;
+    case 1: end(); break;
     }
   }
 
@@ -156,7 +156,7 @@ struct const_iterator {
   const_iterator& operator++() { next(); return *this; }
   const_iterator operator++(int) { next(); return *this; }
   bool operator!=(const const_iterator& other) const {
-    return ref != other.ref || &get() != &other.get();
+    return ref != other.ref || cmp(other.state);
   }
   bool operator==(const const_iterator& other) const {
     return !operator!=(other);
@@ -171,7 +171,7 @@ struct const_iterator {
 
   // Comparisons between const and normal iterators:
   bool operator!=(const iterator<C,T,S>& other) const {
-    return ref != other.ref || &get() != &other.get();
+    return ref != other.ref || cmp(other.state);
   }
   bool operator==(const iterator<C,T,S>& other) const {
     return !operator!=(other);
