@@ -8,7 +8,7 @@ Provides a header-only C++ iterator template that is easy to adapt for any custo
 - STL Compliant (needs some improvement).
 - No efficience loss, it is as efficient as it could possible be.
 - Really easy to understand.
-- Concise, on simple cases it takes only 9 lines to adapt a container,
+- Concise: on simple cases it takes only 9 lines to adapt a container,
   and on more complex cases it takes only a few lines more.
 
 It not only provides a forward `iterator` to your class but also a `const_iterator`
