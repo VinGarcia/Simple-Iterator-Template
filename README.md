@@ -18,8 +18,8 @@ version must be provided (still included in the 9 lines).
 ## Future Work:
 
 - Add reverse iterator capabilities
-- Adapt template to work as `const` (e.g. `const const_iterator`)
-- Implement all operations required by STL iterators idiom.
+- Adapt template to work as `const` (e.g. `const const_iterator` and `const iterator`)
+- Implement all operations required by the STL iterators idiom.
 
 ## Usage:
 
