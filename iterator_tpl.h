@@ -18,8 +18,8 @@ namespace iterator_tpl {
 // Use this define to declare only `const_iterator`
 #define SETUP_MUTABLE_ITERATOR(C, T, S) \
   typedef iterator_tpl::const_iterator<C, T, S> const_iterator;\
-  const_iterator begin() const { const_iterator::begin(this); }\
-  const_iterator end() const { const_iterator::end(this); }
+  const_iterator begin() const { return const_iterator::begin(this); }\
+  const_iterator end() const { return const_iterator::end(this); }
 
 #define STL_TYPEDEFS(T) \
   typedef std::ptrdiff_t difference_type;\
@@ -28,7 +28,7 @@ namespace iterator_tpl {
   typedef T* pointer;\
   typedef const T* const_pointer;\
   typedef T& reference;\
-  typedef const T& const_reference;
+  typedef const T& const_reference
 
 // Forward declaration of const_iterator:
 template <class C, typename T, class S>
@@ -58,6 +58,8 @@ struct iterator {
   void end() { state.end(ref); }
   // Returns current `value`
   T& get() { return state.get(ref); }
+  // Optional used for const comparisons:
+  const T& get() const { return state.get(ref); }
 
  public:
   static iterator begin(C* ref) { return iterator(ref, 1); }
@@ -73,18 +75,31 @@ struct iterator {
   }
 
  public:
+  // Note: Instances build with this constructor should
+  // be used only after copy-assigning from other iterator!
+  iterator() {}
+
+ public:
   T& operator*() { return get(); }
   T* operator->() { return &get(); }
   iterator& operator++() { next(); return *this; }
   iterator operator++(int) { next(); return *this; }
-  bool operator!=(iterator& other) {
-    return ref != other.ref || get() != other.get();
+  bool operator!=(const iterator& other) const {
+    return ref != other.ref || &get() != &other.get();
   }
-  bool operator==(iterator& other) {
+  bool operator==(const iterator& other) const {
     return !operator!=(other);
   }
 
   friend class iterator_tpl::const_iterator<C,T,S>;
+
+  // Comparisons between const and normal iterators:
+  bool operator!=(const const_iterator<C,T,S>& other) const {
+    return ref != other.ref || &get() != &other.get();
+  }
+  bool operator==(const const_iterator<C,T,S>& other) const {
+    return !operator!=(other);
+  }
 };
 
 /* * * * * CONST ITERATOR TEMPLATE: * * * * */
@@ -106,7 +121,7 @@ struct const_iterator {
   // Initialize iterator to end state:
   void end() { state.end(ref); }
   // Returns current `value`
-  const T& get() { return state.get(ref); }
+  const T& get() const { return state.get(ref); }
 
  public:
   static const_iterator begin(const C* ref) {
@@ -126,19 +141,40 @@ struct const_iterator {
   }
 
  public:
+  // Note: Instances build with this constructor should
+  // be used only after copy-assigning from other iterator!
+  const_iterator() {}
+
+  // To make possible copy-construct non-const iterators:
+  const_iterator(const iterator<C,T,S>& other) : ref(other.ref) {
+    state = other.state;
+  }
+
+ public:
   const T& operator*() { return get(); }
   const T* operator->() { return &get(); }
   const_iterator& operator++() { next(); return *this; }
   const_iterator operator++(int) { next(); return *this; }
-  bool operator!=(const_iterator& other) {
-    return ref != other.ref || get() != other.get();
+  bool operator!=(const const_iterator& other) const {
+    return ref != other.ref || &get() != &other.get();
   }
-  bool operator==(const_iterator& other) {
+  bool operator==(const const_iterator& other) const {
     return !operator!=(other);
   }
   const_iterator& operator=(const iterator<C,T,S>& other) {
+    ref = other.ref;
     state = other.state;
     return *this;
+  }
+
+  friend class iterator_tpl::iterator<C,T,S>;
+
+  // Comparisons between const and normal iterators:
+  bool operator!=(const iterator<C,T,S>& other) const {
+    return ref != other.ref || &get() != &other.get();
+  }
+  bool operator==(const iterator<C,T,S>& other) const {
+    return !operator!=(other);
   }
 };
 
