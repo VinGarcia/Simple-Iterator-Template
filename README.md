@@ -1,11 +1,11 @@
 # Simple Iterator Template
 
-Provides a header-only C++ iterator template that is easy to adapt for any custom container
+Provides a header-only C++ iterator template that is easy to adapt for any custom container.
 
 ## Features:
 
 - Single header.
-- STL Compliant (needs some improvement, but it will be soon).
+- STL Compliant (needs some improvement).
 - No efficience cost, it is as efficient as it could possible be.
 - Really easy to understand.
 - Concise, on simple cases it takes only 9 lines to adapt a container,
