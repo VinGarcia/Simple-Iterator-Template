@@ -30,6 +30,10 @@ namespace iterator_tpl {
   typedef T& reference;\
   typedef const T& const_reference;
 
+// Forward declaration of const_iterator:
+template <class C, typename T, class S>
+class const_iterator;
+
 /* * * * * MUTABLE ITERATOR TEMPLATE: * * * * */
 
 // C - The container type
@@ -60,8 +64,8 @@ struct iterator {
   static iterator end(C* ref) { return iterator(ref, 0); }
 
  protected:
-  iterator(C* ref, int state) : ref(ref) {
-    if (state) {
+  iterator(C* ref, int state_begin) : ref(ref) {
+    if (state_begin) {
       begin();
     } else {
       end();
@@ -70,10 +74,17 @@ struct iterator {
 
  public:
   T& operator*() { return get(); }
+  T* operator->() { return &get(); }
   iterator& operator++() { next(); return *this; }
+  iterator operator++(int) { next(); return *this; }
   bool operator!=(iterator& other) {
     return ref != other.ref || get() != other.get();
   }
+  bool operator==(iterator& other) {
+    return !operator!=(other);
+  }
+
+  friend class iterator_tpl::const_iterator<C,T,S>;
 };
 
 /* * * * * CONST ITERATOR TEMPLATE: * * * * */
@@ -106,8 +117,8 @@ struct const_iterator {
   }
 
  protected:
-  const_iterator(const C* ref, int state) : ref(ref) {
-    if (state) {
+  const_iterator(const C* ref, int state_begin) : ref(ref) {
+    if (state_begin) {
       begin();
     } else {
       end();
@@ -116,9 +127,18 @@ struct const_iterator {
 
  public:
   const T& operator*() { return get(); }
+  const T* operator->() { return &get(); }
   const_iterator& operator++() { next(); return *this; }
+  const_iterator operator++(int) { next(); return *this; }
   bool operator!=(const_iterator& other) {
     return ref != other.ref || get() != other.get();
+  }
+  bool operator==(const_iterator& other) {
+    return !operator!=(other);
+  }
+  const_iterator& operator=(const iterator<C,T,S>& other) {
+    state = other.state;
+    return *this;
   }
 };
 
