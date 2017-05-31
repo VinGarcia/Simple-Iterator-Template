@@ -6,16 +6,20 @@ namespace iterator_tpl {
 // - `const_iterator`:
 // As members of your class
 #define SETUP_ITERATORS(C, T, S) \
-  ___SETUP_MUTABLE_ITERATOR(C, T, S) \
-  ___SETUP_CONST_ITERATOR(C, T, S)
+  SETUP_MUTABLE_ITERATOR(C, T, S) \
+  SETUP_CONST_ITERATOR(C, T, S)
 
 // Use this define to declare only `iterator`
-#define SETUP_CONST_ITERATOR_ONLY(C, T, S) \
-  ___SETUP_CONST_ITERATOR(C, T, S)
+#define SETUP_CONST_ITERATOR(C, T, S) \
+  typedef iterator_tpl::iterator<C, T, S> iterator;\
+  iterator begin() { return iterator::begin(this); }\
+  iterator end() { return iterator::end(this); }
 
 // Use this define to declare only `const_iterator`
-#define SETUP_MUTABLE_ITERATOR_ONLY(C, T, S) \
-  ___SETUP_MUTABLE_ITERATOR(C, T, S)
+#define SETUP_MUTABLE_ITERATOR(C, T, S) \
+  typedef iterator_tpl::const_iterator<C, T, S> const_iterator;\
+  const_iterator begin() const { const_iterator::begin(this); }\
+  const_iterator end() const { const_iterator::end(this); }
 
 #define STL_TYPEDEFS(T) \
   typedef std::ptrdiff_t difference_type;\
@@ -117,17 +121,5 @@ struct const_iterator {
     return ref != other.ref || get() != other.get();
   }
 };
-
-// These 2 defines are for internal use of the library,
-// prefer to use the ones described on the top of this file.
-#define ___SETUP_MUTABLE_ITERATOR(C, T, S) \
-  typedef iterator_tpl::iterator<C, T, S> iterator;\
-  iterator begin() { return iterator::begin(this); }\
-  iterator end() { return iterator::end(this); }
-
-#define ___SETUP_CONST_ITERATOR(C, T, S) \
-  typedef iterator_tpl::const_iterator<C, T, S> const_iterator;\
-  const_iterator begin() const { const_iterator::begin(this); }\
-  const_iterator end() const { const_iterator::end(this); }
 
 }  // namespace iterator_tpl
