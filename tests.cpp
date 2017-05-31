@@ -6,6 +6,9 @@
 struct MyContainer {
   std::vector<std::string> vec;
 
+  // Add some sane typedefs to make it STL friendly:
+  STL_TYPEDEFS(std::string); // (This step is optional)
+
   struct it_state {
     int pos;
     inline void next(const MyContainer* ref) { ++pos; }

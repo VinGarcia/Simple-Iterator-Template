@@ -6,19 +6,25 @@ namespace iterator_tpl {
 // - `const_iterator`:
 // As members of your class
 #define SETUP_ITERATORS(C, T, S) \
-  _SETUP_ITERATOR_TYPEDEFS(T) \
   _SETUP_MUTABLE_ITERATOR(C, T, S) \
   _SETUP_CONST_ITERATOR(C, T, S)
 
 // Use this define to declare only `iterator`
 #define SETUP_CONST_ITERATOR_ONLY(C, T, S) \
-  _SETUP_ITERATOR_TYPEDEFS(T) \
   _SETUP_CONST_ITERATOR(C, T, S)
 
 // Use this define to declare only `const_iterator`
 #define SETUP_MUTABLE_ITERATOR_ONLY(C, T, S) \
-  _SETUP_ITERATOR_TYPEDEFS(T) \
   _SETUP_MUTABLE_ITERATOR(C, T, S)
+
+#define STL_TYPEDEFS(T) \
+  typedef std::ptrdiff_t difference_type;\
+  typedef size_t size_type;\
+  typedef T value_type;\
+  typedef T* pointer;\
+  typedef const T* const_pointer;\
+  typedef T& reference;\
+  typedef const T& const_reference;
 
 /* * * * * MUTABLE ITERATOR TEMPLATE: * * * * */
 
@@ -112,15 +118,8 @@ struct const_iterator {
   }
 };
 
-// These 3 defines are for `private` use of the library,
+// These 2 defines are for internal use of the library,
 // prefer to use the ones described on the top of this file.
-#define _SETUP_ITERATOR_TYPEDEFS(T) \
-  typedef std::ptrdiff_t difference_type;\
-  typedef size_t size_type;\
-  typedef T value_type;\
-  typedef T* pointer;\
-  typedef T& reference;
-
 #define _SETUP_MUTABLE_ITERATOR(C, T, S) \
   typedef iterator_tpl::iterator<C, T, S> iterator;\
   iterator begin() { return iterator::begin(this); }\
