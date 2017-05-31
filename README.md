@@ -2,6 +2,25 @@
 
 Provides a header-only C++ iterator template that is easy to adapt for any custom container
 
+## Features:
+
+- Single header.
+- STL Compliant (needs some improvement, but it will be soon).
+- No efficience cost, it is as efficient as it could possible be.
+- Really easy to understand.
+- Concise, on simple cases it takes only 9 lines to adapt a container,
+  and on more complex cases it takes only a few lines more.
+
+It not only provides a forward `iterator` to your class but also a `const_iterator`
+reusing the same definitions except for the `get()` function, for whom a const
+version must be provided (still included in the 9 lines).
+
+## Future Work:
+
+- Add reverse iterator capabilities
+- Adapt template to work as `const` (e.g. `const const_iterator`)
+- Implement all operations required by STL iterators idiom.
+
 ## Usage:
 
 ```C++
