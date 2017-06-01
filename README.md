@@ -219,7 +219,7 @@ struct myClass {
 };
 ```
 
-You could then run the `iterators`, `const_iterators` and reversed iterators as before:
+You can then run the `iterators`, `const_iterators` and `reversed_iterators` as before:
 
 ```C++
 int main() {
