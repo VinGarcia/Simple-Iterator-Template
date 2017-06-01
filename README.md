@@ -15,32 +15,27 @@ It not only provides a forward `iterator` to your class but also a `const_iterat
 reusing the same definitions except for the `get()` function, for whom a const
 version must be provided (still included in the 9 lines).
 
-## Future Work:
-
-- Add reverse iterator capabilities
-- Adapt template to work as `const` (e.g. `const const_iterator` and `const iterator`)
-- Implement all operations required by the STL iterators idiom.
-
 ## Usage:
 
 ```C++
 #include <iostream>
 #include <vector>
 
-#include "iterable.h"
+#include "iterator_tpl.h"
 
-struct test {
-  std::vector<int> vec;
+struct myClass {
+  std::vector<float> vec;
 
   struct it_state {
     int pos;
-    inline void next(const test* ref) { ++pos; }
-    inline void begin(const test* ref) { pos = 0; }
-    inline void end(const test* ref) { pos = ref->vec.size(); }
-    inline int& get(test* ref) { return ref->vec[pos]; }
-    inline const int& get(const test* ref) { return ref->vec[pos]; }
+    inline void next(const myClass* ref) { ++pos; }
+    inline void begin(const myClass* ref) { pos = 0; }
+    inline void end(const myClass* ref) { pos = ref->vec.size(); }
+    inline float& get(myClass* ref) { return ref->vec[pos]; }
+    inline const float& get(const myClass* ref) { return ref->vec[pos]; }
+    inline bool cmp(const it_state& s) const { return pos != s.pos; }
   };
-  SETUP_ITERATORS(test, int, it_state);
+  SETUP_ITERATORS(myClass, float, it_state);
 };
 ```
 
