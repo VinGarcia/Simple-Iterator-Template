@@ -44,20 +44,20 @@ Then it is easy to use the container as a normal iterator, e.g.:
 ```C++
 int main() {
   test a;
-  a.vec.push_back(3);
-  a.vec.push_back(4);
-  a.vec.push_back(5);
+  a.vec.push_back(1.0);
+  a.vec.push_back(2.0);
+  a.vec.push_back(3.0);
 
   std::cout << "mutable iterator:" << std::endl;
-  for (int b : a1) {
-    std::cout << b << " "; // 3 4 5
+  for (int& val : a1) {
+    std::cout << val << " "; // 1 2 3
   }
   std::cout << std::endl;
 
   std::cout << "const iterator:" << std::endl;
   const test& a2 = a1;
-  for (int b : a2) {
-    std::cout << b << " "; // 3 4 5
+  for (int& val : a2) {
+    std::cout << val << " "; // 1 2 3
   }
   std::cout << std::endl;
 
