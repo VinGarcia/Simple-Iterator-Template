@@ -5,15 +5,17 @@ Provides a header-only C++ iterator template that is easy to adapt for any custo
 ## Features:
 
 - Single header.
-- STL Compliant (needs some improvement).
+- STL Compliant.
 - No efficience loss, it is as efficient as it could possible be.
 - Really easy to understand.
-- Concise, on simple cases it takes only 9 lines to adapt a container,
-  and on more complex cases it takes only a few lines more.
+- Concise, on simple cases it takes only 10 lines to adapt a container,
+  and on more complex cases it takes only a few extra lines.
 
 It not only provides a forward `iterator` to your class but also a `const_iterator`
 reusing the same definitions except for the `get()` function, for whom a const
 version must be provided (still included in the 9 lines).
+
+It also includes an optional `reversed_iterator` and `const_reversed_iterator`, to add them you need to add a function `prev()` described below and a single macro that accepts the same arguments used for the normal iterators.
 
 ## Usage:
 
@@ -187,6 +189,7 @@ struct myClass {
   typedef iterator_tpl::iterator<myClass, float, it_state> iterator;
   iterator begin() { return iterator::begin(this); }
   iterator end() { return iterator::end(this); }
+
   // Const Iterator:
   typedef iterator_tpl::const_iterator<myClass, float, it_state> const_iterator;
   const_iterator begin() const { return const_iterator::begin(this); }
@@ -216,7 +219,7 @@ struct myClass {
 };
 ```
 
-You could then run the iterators, const_iterators and reversed iterators as before:
+You could then run the `iterators`, `const_iterators` and reversed iterators as before:
 
 ```C++
 int main() {
