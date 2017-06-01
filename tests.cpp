@@ -18,13 +18,15 @@ struct MyContainer {
   struct it_state {
     int pos;
     inline void next(const MyContainer* ref) { ++pos; }
+    inline void prev(const MyContainer* ref) { --pos; }
     inline void begin(const MyContainer* ref) { pos = 0; }
     inline void end(const MyContainer* ref) { pos = ref->vec.size(); }
     inline std::string& get(MyContainer* ref) { return ref->vec[pos]; }
     inline const std::string& get(const MyContainer* ref) { return ref->vec[pos]; }
-    bool cmp(const it_state& s) const { return pos != s.pos; }
+    inline bool cmp(const it_state& s) const { return pos != s.pos; }
   };
   SETUP_ITERATORS(MyContainer, std::string, it_state);
+  SETUP_REVERSE_ITERATORS(MyContainer, std::string, it_state);
 };
 
 int main() {
@@ -44,6 +46,18 @@ int main() {
   const MyContainer& c2 = c1;
   for (const std::string& str : c2) {
     std::cout << str << std::endl; // val1 val2 val3
+  }
+
+  std::cout << std::endl;
+  std::cout << "reversed iterator:" << std::endl;
+  for (auto it = c1.rbegin(); it != c1.rend(); ++it) {
+    std::cout << *it << std::endl; // val3 val2 val1
+  }
+
+  std::cout << std::endl;
+  std::cout << "reversed const iterator:" << std::endl;
+  for (auto it = c2.rbegin(); it != c2.rend(); ++it) {
+    std::cout << *it << std::endl; // val3 val2 val1
   }
   std::cout << std::endl;
 

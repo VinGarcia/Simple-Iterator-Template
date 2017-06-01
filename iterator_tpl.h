@@ -21,6 +21,31 @@ namespace iterator_tpl {
   const_iterator begin() const { return const_iterator::begin(this); }\
   const_iterator end() const { return const_iterator::end(this); }
 
+// S should be the state struct used to forward iteration:
+#define SETUP_REVERSE_ITERATORS(C, T, S) \
+  struct S##_reversed : public S {\
+    inline void next(const C* ref) { S::prev(ref); }\
+    inline void prev(const C* ref) { S::next(ref); }\
+    inline void begin(const C* ref) { S::end(ref); S::prev(ref);}\
+    inline void end(const C* ref) { S::begin(ref); S::prev(ref);}\
+  };\
+  SETUP_MUTABLE_RITERATOR(C, T, S) \
+  SETUP_CONST_RITERATOR(C, T, S)
+
+#define SETUP_MUTABLE_RITERATOR(C, T, S) \
+  typedef iterator_tpl::iterator<C, T, S##_reversed > reverse_iterator;\
+  reverse_iterator rbegin() { return reverse_iterator::begin(this); }\
+  reverse_iterator rend() { return reverse_iterator::end(this); }\
+
+#define SETUP_CONST_RITERATOR(C, T, S) \
+  typedef iterator_tpl::const_iterator<C, T, S##_reversed > const_reverse_iterator;\
+  const_reverse_iterator rbegin() const {\
+    return const_reverse_iterator::begin(this);\
+  }\
+  const_reverse_iterator rend() const {\
+    return const_reverse_iterator::end(this);\
+  }
+
 #define STL_TYPEDEFS(T) \
   typedef std::ptrdiff_t difference_type;\
   typedef size_t size_type;\
@@ -62,17 +87,23 @@ struct iterator {
   const T& get() const { return state.get(ref); }
   bool cmp(const S& s) const { return state.cmp(s); }
 
+  // Optional function for reverse iteration:
+  void prev() { state.prev(ref); }
+
  public:
-  static iterator begin(C* ref) { return iterator(ref, 0); }
-  static iterator end(C* ref) { return iterator(ref, 1); }
+  static iterator begin(C* ref) {
+    iterator it(ref);
+    it.begin();
+    return it;
+  }
+  static iterator end(C* ref) {
+    iterator it(ref);
+    it.end();
+    return it;
+  }
 
  protected:
-  iterator(C* ref, int initial_state) : ref(ref) {
-    switch (initial_state) {
-    case 0: begin(); break;
-    case 1: end(); break;
-    }
-  }
+  iterator(C* ref) : ref(ref) {}
 
  public:
   // Note: Instances build with this constructor should
@@ -84,6 +115,8 @@ struct iterator {
   T* operator->() { return &get(); }
   iterator& operator++() { next(); return *this; }
   iterator operator++(int) { next(); return *this; }
+  iterator& operator--() { prev(); return *this; }
+  iterator operator--(int) { prev(); return *this; }
   bool operator!=(const iterator& other) const {
     return ref != other.ref || cmp(other.state);
   }
@@ -124,21 +157,23 @@ struct const_iterator {
   const T& get() { return state.get(ref); }
   bool cmp(const S& s) const { return state.cmp(s); }
 
+  // Optional function for reverse iteration:
+  void prev() { state.prev(ref); }
+
  public:
   static const_iterator begin(const C* ref) {
-    return const_iterator(ref, 0);
+    const_iterator it(ref);
+    it.begin();
+    return it;
   }
   static const_iterator end(const C* ref) {
-    return const_iterator(ref, 1);
+    const_iterator it(ref);
+    it.end();
+    return it;
   }
 
  protected:
-  const_iterator(const C* ref, int initial_state) : ref(ref) {
-    switch (initial_state) {
-    case 0: begin(); break;
-    case 1: end(); break;
-    }
-  }
+  const_iterator(const C* ref) : ref(ref) {}
 
  public:
   // Note: Instances build with this constructor should
@@ -155,6 +190,8 @@ struct const_iterator {
   const T* operator->() { return &get(); }
   const_iterator& operator++() { next(); return *this; }
   const_iterator operator++(int) { next(); return *this; }
+  const_iterator& operator--() { prev(); return *this; }
+  const_iterator operator--(int) { prev(); return *this; }
   bool operator!=(const const_iterator& other) const {
     return ref != other.ref || cmp(other.state);
   }
