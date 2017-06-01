@@ -69,7 +69,7 @@ int main() {
 
 To add reverse iterators it is only required to do 2 things:
 
-1. Add a void prev(const myClass* ref) { --pos; } function to state_it.
+1. Add a void `prev(const myClass* ref) { --pos; }` function to state_it.
 2. Add macro `SETUP_REVERSE_ITERATORS` with the same 3 arguments of `SETUP_ITERATORS`.
 
 ```C++
