@@ -18,11 +18,30 @@ struct myClass {
     inline void begin(const myClass* ref) { pos = 0; }
     inline void end(const myClass* ref) { pos = ref->vec.size(); }
     inline float& get(myClass* ref) { return ref->vec[pos]; }
-    inline const float& get(const myClass* ref) { return ref->vec[pos]; }
+    inline const float& get(const myClass* ref) const { return ref->vec[pos]; }
     inline bool cmp(const it_state& s) const { return pos != s.pos; }
   };
-  SETUP_ITERATORS(myClass, float, it_state);
-  SETUP_REVERSE_ITERATORS(myClass, float, it_state);
+  SETUP_ITERATORS(myClass, float&, it_state);
+  SETUP_REVERSE_ITERATORS(myClass, float&, it_state);
+};
+
+// This class's iterator will return only rvalues, i.e.
+// `float` instead of `float&`
+struct myClass_rvalue {
+  std::vector<float> vec;
+
+  struct it_state {
+    int pos;
+    inline void next(const myClass_rvalue* ref) { ++pos; }
+    inline void prev(const myClass_rvalue* ref) { --pos; }
+    inline void begin(const myClass_rvalue* ref) { pos = 0; }
+    inline void end(const myClass_rvalue* ref) { pos = ref->vec.size(); }
+    inline float get(myClass_rvalue* ref) { return ref->vec[pos] - 1; }
+    inline const float get(const myClass_rvalue* ref) { return ref->vec[pos] - 1; }
+    inline bool cmp(const it_state& s) const { return pos != s.pos; }
+  };
+  SETUP_ITERATORS(myClass_rvalue, float, it_state);
+  SETUP_REVERSE_ITERATORS(myClass_rvalue, float, it_state);
 };
 
 int main() {
@@ -34,27 +53,69 @@ int main() {
   std::cout << std::endl;
   std::cout << "mutable iterator:" << std::endl;
   for (float& val : c1) {
-    std::cout << val << std::endl; // val1 val2 val3
+    std::cout << val << " "; // val1 val2 val3
   }
+  std::cout << std::endl;
 
   std::cout << std::endl;
   std::cout << "const iterator:" << std::endl;
   const myClass& c2 = c1;
   for (const float& val : c2) {
-    std::cout << val << std::endl; // val1 val2 val3
+    std::cout << val << " "; // val1 val2 val3
   }
+  std::cout << std::endl;
 
   std::cout << std::endl;
   std::cout << "reversed iterator:" << std::endl;
   for (auto it = c1.rbegin(); it != c1.rend(); ++it) {
-    std::cout << *it << std::endl; // val3 val2 val1
+    std::cout << *it << " "; // val3 val2 val1
   }
+  std::cout << std::endl;
 
   std::cout << std::endl;
   std::cout << "reversed const iterator:" << std::endl;
   for (auto it = c2.rbegin(); it != c2.rend(); ++it) {
-    std::cout << *it << std::endl; // val3 val2 val1
+    std::cout << *it << " "; // val3 val2 val1
   }
+  std::cout << std::endl;
+
+  myClass_rvalue c1_rvalue;
+  c1_rvalue.vec.push_back(1.0);
+  c1_rvalue.vec.push_back(2.0);
+  c1_rvalue.vec.push_back(3.0);
+  const myClass_rvalue& c2_rvalue = c1_rvalue;
+
+  std::cout << std::endl;
+  std::cout << "rvalue mutable iterator:" << std::endl;
+  for (auto it = c1_rvalue.begin(); it != c1_rvalue.end(); ++it) {
+    float val = *it;
+    std::cout << val << " "; // val3 val2 val1
+  }
+  std::cout << std::endl;
+
+  std::cout << std::endl;
+  std::cout << "rvalue const iterator:" << std::endl;
+  for (auto it = c2_rvalue.begin(); it != c2_rvalue.end(); ++it) {
+    float val = *it;
+    std::cout << val << " "; // val3 val2 val1
+  }
+  std::cout << std::endl;
+
+  std::cout << std::endl;
+  std::cout << "rvalue reversed mutable iterator:" << std::endl;
+  for (auto it = c1_rvalue.rbegin(); it != c1_rvalue.rend(); ++it) {
+    float val = *it;
+    std::cout << val << " "; // val3 val2 val1
+  }
+  std::cout << std::endl;
+
+  std::cout << std::endl;
+  std::cout << "rvalue reversed const iterator:" << std::endl;
+  for (auto it = c2_rvalue.rbegin(); it != c2_rvalue.rend(); ++it) {
+    float val = *it;
+    std::cout << val << " "; // val3 val2 val1
+  }
+  std::cout << std::endl;
   std::cout << std::endl;
 
   // Testing copy-constructor and copy-assignment between
