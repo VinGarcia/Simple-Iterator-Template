@@ -37,7 +37,7 @@ struct myClass {
     inline const float& get(const myClass* ref) { return ref->vec[pos]; }
     inline bool cmp(const it_state& s) const { return pos != s.pos; }
   };
-  SETUP_ITERATORS(myClass, float, it_state);
+  SETUP_ITERATORS(myClass, float&, it_state);
 };
 ```
 
@@ -88,8 +88,8 @@ struct myClass {
     inline const float& get(const myClass* ref) { return ref->vec[pos]; }
     inline bool cmp(const it_state& s) const { return pos != s.pos; }
   };
-  SETUP_ITERATORS(myClass, float, it_state);
-  SETUP_REVERSE_ITERATORS(myClass, float, it_state); // <-- Add REVERSE_ITERATORS macro
+  SETUP_ITERATORS(myClass, float&, it_state);
+  SETUP_REVERSE_ITERATORS(myClass, float&, it_state); // <-- Add REVERSE_ITERATORS macro
 };
 ```
 
@@ -122,6 +122,35 @@ int main() {
 }
 ```
 
+## Returning RValues
+
+Returning by reference is nice, it allows you to change the internal values of the iterator
+and prevents unnecessary copies. However, sometimes it is not possible.
+
+For these cases the library allows you to specify the template with a type `float` instead
+of `float&`, e.g.:
+
+```C++
+  SETUP_ITERATORS(myClass, float, it_state);
+  SETUP_REVERSE_ITERATORS(myClass, float, it_state);
+```
+
+This allows for the get() functions to return `float` when returning `float&`
+would not be possible, e.g.:
+
+```C++
+  struct it_state {
+    int pos;
+    inline void next(const myClass* ref) { ++pos; }
+    inline void prev(const myClass* ref) { --pos; }
+    inline void begin(const myClass* ref) { pos = 0; }
+    inline void end(const myClass* ref) { pos = ref->vec.size(); }
+    inline float get(myClass* ref) { return 1 + ref->vec[pos]; }
+    inline const float get(const myClass* ref) { return 1 + ref->vec[pos]; }
+    inline bool cmp(const it_state& s) const { return pos != s.pos; }
+  };
+```
+
 ## STL Typedefs
 
 To offer fully compliance to STL iterators there is an easy way to add some sane defaults for the required typedefs to your class, the macro `STL_TYPEDEFS`:
@@ -141,8 +170,8 @@ struct myClass {
     inline const float& get(const myClass* ref) { return ref->vec[pos]; }
     inline bool cmp(const it_state& s) const { return pos != s.pos; }
   };
-  SETUP_ITERATORS(myClass, float, it_state);
-  SETUP_REVERSE_ITERATORS(myClass, float, it_state); // (Optional)
+  SETUP_ITERATORS(myClass, float&, it_state);
+  SETUP_REVERSE_ITERATORS(myClass, float&, it_state); // (Optional)
 };
 ```
 
@@ -186,12 +215,12 @@ struct myClass {
   };
 
   // Mutable Iterator:
-  typedef iterator_tpl::iterator<myClass, float, it_state> iterator;
+  typedef iterator_tpl::iterator<myClass, float&, it_state> iterator;
   iterator begin() { return iterator::begin(this); }
   iterator end() { return iterator::end(this); }
 
   // Const Iterator:
-  typedef iterator_tpl::const_iterator<myClass, float, it_state> const_iterator;
+  typedef iterator_tpl::const_iterator<myClass, float&, it_state> const_iterator;
   const_iterator begin() const { return const_iterator::begin(this); }
   const_iterator end() const { return const_iterator::end(this); }
 
@@ -204,12 +233,12 @@ struct myClass {
   };
 
   // Mutable Reverse Iterator:
-  typedef iterator_tpl::iterator<myClass, float, reverse_it_state> reverse_iterator;
+  typedef iterator_tpl::iterator<myClass, float&, reverse_it_state> reverse_iterator;
   reverse_iterator rbegin() { return reverse_iterator::begin(this); }
   reverse_iterator rend() { return reverse_iterator::end(this); }
 
   // Const Reverse Iterator:
-  typedef iterator_tpl::const_iterator<myClass, float, reverse_it_state> const_reverse_iterator;
+  typedef iterator_tpl::const_iterator<myClass, float&, reverse_it_state> const_reverse_iterator;
   const_reverse_iterator rbegin() const {
     return const_reverse_iterator::begin(this);
   }
