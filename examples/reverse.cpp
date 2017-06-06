@@ -35,7 +35,8 @@ int main() {
 
   std::cout << std::endl;
   std::cout << "mutable iterator:" << std::endl;
-  for (float& val : c1) {
+  for (myClass::iterator it = c1.begin(); it != c1.end(); ++it) {
+    float& val = *it;
     std::cout << val << " "; // val1 val2 val3
   }
   std::cout << std::endl;
@@ -43,21 +44,22 @@ int main() {
   std::cout << std::endl;
   std::cout << "const iterator:" << std::endl;
   const myClass& c2 = c1;
-  for (const float& val : c2) {
+  for (myClass::const_iterator it = c2.begin(); it != c2.end(); ++it) {
+    const float& val = *it;
     std::cout << val << " "; // val1 val2 val3
   }
   std::cout << std::endl;
 
   std::cout << std::endl;
   std::cout << "reverse iterator:" << std::endl;
-  for (auto it = c1.rbegin(); it != c1.rend(); ++it) {
+  for (myClass::reverse_iterator it = c1.rbegin(); it != c1.rend(); ++it) {
     std::cout << *it << " "; // val3 val2 val1
   }
   std::cout << std::endl;
 
   std::cout << std::endl;
   std::cout << "reverse const iterator:" << std::endl;
-  for (auto it = c2.rbegin(); it != c2.rend(); ++it) {
+  for (myClass::const_reverse_iterator it = c2.rbegin(); it != c2.rend(); ++it) {
     std::cout << *it << " "; // val3 val2 val1
   }
   std::cout << std::endl;

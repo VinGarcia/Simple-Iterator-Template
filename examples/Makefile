@@ -10,5 +10,5 @@ filter:
 	./filter
 
 reverse:
-	g++ -g -Wall -pedantic -std=c++11 reverse.cpp -o reverse
+	g++ -g -Wall -pedantic -std=c++98 reverse.cpp -o reverse
 	./reverse
