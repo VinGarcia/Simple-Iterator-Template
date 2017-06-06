@@ -10,6 +10,7 @@ Provides a header-only C++ iterator template that is easy to adapt for any custo
 - Really easy to understand.
 - Concise, on simple cases it takes only 10 lines to adapt a container,
   and on more complex cases it takes only a few extra lines.
+- Compatible with all C++ standards (see `example/reverse.cpp`).
 
 It not only provides a forward `iterator` to your class but also a `const_iterator`
 reusing the same definitions except for the `get()` function, for whom a const
