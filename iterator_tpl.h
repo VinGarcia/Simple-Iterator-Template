@@ -7,54 +7,54 @@ namespace iterator_tpl {
 // - `iterator`
 // - `const_iterator`:
 // As members of your class
-#define SETUP_ITERATORS(C, T, S) \
+#define SETUP_ITERATORS(C, T, S)  \
   SETUP_MUTABLE_ITERATOR(C, T, S) \
   SETUP_CONST_ITERATOR(C, T, S)
 
 // Use this define to declare only `iterator`
-#define SETUP_MUTABLE_ITERATOR(C, T, S) \
-  typedef iterator_tpl::iterator<C, T, S> iterator;\
-  iterator begin() { return iterator::begin(this); }\
-  iterator end() { return iterator::end(this); }
+#define SETUP_MUTABLE_ITERATOR(C, T, S)              \
+  typedef iterator_tpl::iterator<C, T, S> iterator;  \
+  iterator begin() { return iterator::begin(this); } \
+  iterator end()   { return iterator::end(this);   }
 
 // Use this define to declare only `const_iterator`
-#define SETUP_CONST_ITERATOR(C, T, S) \
-  typedef iterator_tpl::const_iterator<C, T, S> const_iterator;\
-  const_iterator begin() const { return const_iterator::begin(this); }\
-  const_iterator end() const { return const_iterator::end(this); }
+#define SETUP_CONST_ITERATOR(C, T, S)                                  \
+  typedef iterator_tpl::const_iterator<C, T, S> const_iterator;        \
+  const_iterator begin() const { return const_iterator::begin(this); } \
+  const_iterator end()   const { return const_iterator::end(this);   }
 
 // S should be the state struct used to forward iteration:
-#define SETUP_REVERSE_ITERATORS(C, T, S) \
-  struct S##_reversed : public S {\
-    inline void next(const C* ref) { S::prev(ref); }\
-    inline void prev(const C* ref) { S::next(ref); }\
-    inline void begin(const C* ref) { S::end(ref); S::prev(ref);}\
-    inline void end(const C* ref) { S::begin(ref); S::prev(ref);}\
-  };\
-  SETUP_MUTABLE_RITERATOR(C, T, S) \
+#define SETUP_REVERSE_ITERATORS(C, T, S)                            \
+  struct S##_reversed : public S {                                  \
+    inline void next (const C* ref) { S::prev(ref); }               \
+    inline void prev (const C* ref) { S::next(ref); }               \
+    inline void begin(const C* ref) { S::end(ref); S::prev(ref);}   \
+    inline void end  (const C* ref) { S::begin(ref); S::prev(ref);} \
+  };                                                                \
+  SETUP_MUTABLE_RITERATOR(C, T, S)                                  \
   SETUP_CONST_RITERATOR(C, T, S)
 
 #define SETUP_MUTABLE_RITERATOR(C, T, S) \
-  typedef iterator_tpl::iterator<C, T, S##_reversed > reverse_iterator;\
-  reverse_iterator rbegin() { return reverse_iterator::begin(this); }\
-  reverse_iterator rend() { return reverse_iterator::end(this); }\
+  typedef iterator_tpl::iterator<C, T, S##_reversed > reverse_iterator; \
+  reverse_iterator rbegin() { return reverse_iterator::begin(this); }   \
+  reverse_iterator rend()   { return reverse_iterator::end(this); }     \
 
-#define SETUP_CONST_RITERATOR(C, T, S) \
-  typedef iterator_tpl::const_iterator<C, T, S##_reversed > const_reverse_iterator;\
-  const_reverse_iterator rbegin() const {\
-    return const_reverse_iterator::begin(this);\
-  }\
-  const_reverse_iterator rend() const {\
-    return const_reverse_iterator::end(this);\
+#define SETUP_CONST_RITERATOR(C, T, S)                                              \
+  typedef iterator_tpl::const_iterator<C, T, S##_reversed > const_reverse_iterator; \
+  const_reverse_iterator rbegin() const {                                           \
+    return const_reverse_iterator::begin(this);                                     \
+  }                                                                                 \
+  const_reverse_iterator rend() const {                                             \
+    return const_reverse_iterator::end(this);                                       \
   }
 
-#define STL_TYPEDEFS(T) \
-  typedef std::ptrdiff_t difference_type;\
-  typedef size_t size_type;\
-  typedef T value_type;\
-  typedef T* pointer;\
-  typedef const T* const_pointer;\
-  typedef T& reference;\
+#define STL_TYPEDEFS(T)                    \
+  typedef std::ptrdiff_t difference_type;  \
+  typedef size_t size_type;                \
+  typedef T value_type;                    \
+  typedef T* pointer;                      \
+  typedef const T* const_pointer;          \
+  typedef T& reference;                    \
   typedef const T& const_reference
 
 // Forward declaration of const_iterator:
@@ -78,11 +78,11 @@ struct iterator {
   S state;
 
   // Set iterator to next() state:
-  void next() { state.next(ref); }
+  void next()  { state.next(ref);  }
   // Initialize iterator to first state:
   void begin() { state.begin(ref); }
   // Initialize iterator to end state:
-  void end() { state.end(ref); }
+  void end()   { state.end(ref);   }
   // Returns current `value`
   T get() { return state.get(ref); }
   // Return true if `state != s`:
@@ -113,9 +113,9 @@ struct iterator {
 
  public:
   T operator*() { return get(); }
-  iterator& operator++() { next(); return *this; }
+  iterator& operator++()   { next(); return *this; }
   iterator operator++(int) { next(); return *this; }
-  iterator& operator--() { prev(); return *this; }
+  iterator& operator--()   { prev(); return *this; }
   iterator operator--(int) { prev(); return *this; }
   bool operator!=(const iterator& other) const {
     return ref != other.ref || cmp(other.state);
@@ -147,11 +147,11 @@ struct iterator<C,T&,S> {
   S state;
 
   // Set iterator to next() state:
-  void next() { state.next(ref); }
+  void next()  { state.next(ref);  }
   // Initialize iterator to first state:
   void begin() { state.begin(ref); }
   // Initialize iterator to end state:
-  void end() { state.end(ref); }
+  void end()   { state.end(ref);   }
   // Returns current `value`
   T& get() { return state.get(ref); }
   // Return true if `state != s`:
@@ -181,11 +181,11 @@ struct iterator<C,T&,S> {
   iterator() {}
 
  public:
-  T& operator*() { return get(); }
+  T& operator*()  { return  get(); }
   T* operator->() { return &get(); }
-  iterator& operator++() { next(); return *this; }
+  iterator& operator++()   { next(); return *this; }
   iterator operator++(int) { next(); return *this; }
-  iterator& operator--() { prev(); return *this; }
+  iterator& operator--()   { prev(); return *this; }
   iterator operator--(int) { prev(); return *this; }
   bool operator!=(const iterator& other) const {
     return ref != other.ref || cmp(other.state);
@@ -222,11 +222,11 @@ struct const_iterator {
   S state;
 
   // Set iterator to next() state:
-  void next() { state.next(ref); }
+  void next()  { state.next(ref);  }
   // Initialize iterator to first state:
   void begin() { state.begin(ref); }
   // Initialize iterator to end state:
-  void end() { state.end(ref); }
+  void end()   { state.end(ref);   }
   // Returns current `value`
   const T get() { return state.get(ref); }
   // Return true if `state != s`:
@@ -262,9 +262,9 @@ struct const_iterator {
 
  public:
   const T operator*() { return get(); }
-  const_iterator& operator++() { next(); return *this; }
+  const_iterator& operator++()   { next(); return *this; }
   const_iterator operator++(int) { next(); return *this; }
-  const_iterator& operator--() { prev(); return *this; }
+  const_iterator& operator--()   { prev(); return *this; }
   const_iterator operator--(int) { prev(); return *this; }
   bool operator!=(const const_iterator& other) const {
     return ref != other.ref || cmp(other.state);
@@ -301,11 +301,11 @@ struct const_iterator<C,T&,S> {
   S state;
 
   // Set iterator to next() state:
-  void next() { state.next(ref); }
+  void next()  { state.next(ref);  }
   // Initialize iterator to first state:
   void begin() { state.begin(ref); }
   // Initialize iterator to end state:
-  void end() { state.end(ref); }
+  void end()   { state.end(ref);   }
   // Returns current `value`
   const T& get() { return state.get(ref); }
   // Return true if `state != s`:
@@ -340,11 +340,11 @@ struct const_iterator<C,T&,S> {
   }
 
  public:
-  const T& operator*() { return get(); }
+  const T& operator*()  { return  get(); }
   const T* operator->() { return &get(); }
-  const_iterator& operator++() { next(); return *this; }
+  const_iterator& operator++()   { next(); return *this; }
   const_iterator operator++(int) { next(); return *this; }
-  const_iterator& operator--() { prev(); return *this; }
+  const_iterator& operator--()   { prev(); return *this; }
   const_iterator operator--(int) { prev(); return *this; }
   bool operator!=(const const_iterator& other) const {
     return ref != other.ref || cmp(other.state);
