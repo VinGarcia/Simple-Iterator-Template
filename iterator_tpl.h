@@ -1,3 +1,5 @@
+#ifndef _iterator_tpl_h_
+#define _iterator_tpl_h_
 
 namespace iterator_tpl {
 
@@ -368,3 +370,5 @@ struct const_iterator<C,T&,S> {
 };
 
 }  // namespace iterator_tpl
+
+#endif
