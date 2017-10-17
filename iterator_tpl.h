@@ -212,7 +212,7 @@ struct iterator<C,T&,S> {
 // S - The state keeping structure
 template <class C, typename T, class S>
 // The non-specialized version is used for T=rvalue:
-struct const_iterator {
+class const_iterator {
   // Keeps a reference to the container:
   const C* ref;
 
