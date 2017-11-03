@@ -59,7 +59,7 @@ namespace iterator_tpl {
 
 // Forward declaration of const_iterator:
 template <class C, typename T, class S>
-class const_iterator;
+struct const_iterator;
 
 /* * * * * MUTABLE ITERATOR TEMPLATE: * * * * */
 
@@ -212,7 +212,7 @@ struct iterator<C,T&,S> {
 // S - The state keeping structure
 template <class C, typename T, class S>
 // The non-specialized version is used for T=rvalue:
-class const_iterator {
+struct const_iterator {
   // Keeps a reference to the container:
   const C* ref;
 
