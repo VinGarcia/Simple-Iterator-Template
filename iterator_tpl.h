@@ -112,9 +112,9 @@ struct iterator {
  public:
   T operator*() { return get(); }
   iterator& operator++() { next(); return *this; }
-  iterator operator++(int) { next(); return *this; }
+  iterator operator++(int) { iterator temp(*this); next(); return temp; }
   iterator& operator--() { prev(); return *this; }
-  iterator operator--(int) { prev(); return *this; }
+  iterator operator--(int) { iterator temp(*this); prev(); return temp; }
   bool operator!=(const iterator& other) const {
     return ref != other.ref || cmp(other.state);
   }
@@ -182,9 +182,9 @@ struct iterator<C,T&,S> {
   T& operator*() { return get(); }
   T* operator->() { return &get(); }
   iterator& operator++() { next(); return *this; }
-  iterator operator++(int) { next(); return *this; }
+  iterator operator++(int) { iterator temp(*this); next(); return temp; }
   iterator& operator--() { prev(); return *this; }
-  iterator operator--(int) { prev(); return *this; }
+  iterator operator--(int) {iterator temp(*this); prev(); return temp; }
   bool operator!=(const iterator& other) const {
     return ref != other.ref || cmp(other.state);
   }
@@ -261,9 +261,9 @@ struct const_iterator {
  public:
   const T operator*() { return get(); }
   const_iterator& operator++() { next(); return *this; }
-  const_iterator operator++(int) { next(); return *this; }
+  const_iterator operator++(int) { const_iterator temp(*this); next(); return temp;  }
   const_iterator& operator--() { prev(); return *this; }
-  const_iterator operator--(int) { prev(); return *this; }
+  const_iterator operator--(int) { const_iterator temp(*this); prev(); return temp;  }
   bool operator!=(const const_iterator& other) const {
     return ref != other.ref || cmp(other.state);
   }
@@ -341,9 +341,9 @@ struct const_iterator<C,T&,S> {
   const T& operator*() { return get(); }
   const T* operator->() { return &get(); }
   const_iterator& operator++() { next(); return *this; }
-  const_iterator operator++(int) { next(); return *this; }
+  const_iterator operator++(int) { const_iterator temp(*this); next(); return temp; }
   const_iterator& operator--() { prev(); return *this; }
-  const_iterator operator--(int) { prev(); return *this; }
+  const_iterator operator--(int) { const_iterator temp(*this); prev(); return temp; }
   bool operator!=(const const_iterator& other) const {
     return ref != other.ref || cmp(other.state);
   }
