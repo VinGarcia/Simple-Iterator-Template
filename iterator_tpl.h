@@ -184,7 +184,7 @@ struct iterator<C,T&,S> {
   iterator& operator++() { next(); return *this; }
   iterator operator++(int) { iterator temp(*this); next(); return temp; }
   iterator& operator--() { prev(); return *this; }
-  iterator operator--(int) {iterator temp(*this); prev(); return temp; }
+  iterator operator--(int) { iterator temp(*this); prev(); return temp; }
   bool operator!=(const iterator& other) const {
     return ref != other.ref || cmp(other.state);
   }
