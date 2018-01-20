@@ -6,9 +6,9 @@ Provides a header-only C++ iterator template that is easy to adapt for any custo
 
 - Single header.
 - STL Compliant.
-- No efficience loss, it is as efficient as it could possible be.
+- No efficiency loss, it is as efficient as it could possibly be.
 - Really easy to understand.
-- Concise, on simple cases it takes only 10 lines to adapt a container,
+- Concise: on simple cases it takes only 10 lines to adapt a container,
   and on more complex cases it takes only a few extra lines.
 - Implements Forward Iterator, Input Iterator, Output Iterator and Bidirectional Iterator.
 - Compatible with all C++ standards (see `example/reverse.cpp`).
@@ -71,10 +71,10 @@ int main() {
 
 ## Add reverse iterators:
 
-To add reverse iterators it is only required to do 2 things:
+To add reverse iterators only two things are required:
 
-1. Add a void `prev(const myClass* ref) { --pos; }` function to state_it.
-2. Add macro `SETUP_REVERSE_ITERATORS` with the same 3 arguments of `SETUP_ITERATORS`.
+1. Add a void `prev(const myClass* ref) { --pos; }` function to `state_it`.
+2. Add the macro `SETUP_REVERSE_ITERATORS` with the same 3 arguments as `SETUP_ITERATORS`.
 
 ```C++
 struct myClass {
@@ -155,7 +155,7 @@ would not be possible, e.g.:
 
 ## STL Typedefs
 
-To offer fully compliance to STL iterators there is an easy way to add some sane defaults for the required typedefs to your class, the macro `STL_TYPEDEFS`:
+To offer full compliance with STL iterators there is an easy way to add some sane defaults for the required typedefs to your class, the macro `STL_TYPEDEFS`:
 
 ```C++
 struct myClass {
@@ -250,7 +250,7 @@ struct myClass {
 };
 ```
 
-You can then run the `iterators`, `const_iterators` and `reversed_iterators` as before:
+You can then run the `iterators`, `const_iterators`, and `reversed_iterators` as before:
 
 ```C++
 int main() {
