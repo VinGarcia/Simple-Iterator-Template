@@ -134,5 +134,15 @@ int main() {
   ASSERT(c2.begin() == it2);
   ASSERT((c2.begin() != it2) == 0);
 
+  // Testing operators++ pre and post-fixed:
+  ASSERT(*c1.begin() == 1);
+  ASSERT(*(++c1.begin()) == 2);
+  ASSERT(*(c1.begin()++) == 1);
+
+  // Testing operators++ pre and post-fixed for const classes:
+  ASSERT(*c2.begin() == 1);
+  ASSERT(*(++c2.begin()) == 2);
+  ASSERT(*(c2.begin()++) == 1);
+
   return 0;
 }
