@@ -194,7 +194,7 @@ struct iterator<C,T&,S> {
     return !operator!=(other);
   }
 
-  friend class iterator_tpl::const_iterator<C,T&,S>;
+  friend struct iterator_tpl::const_iterator<C,T&,S>;
 
   // Comparisons between const and normal iterators:
   bool operator!=(const const_iterator<C,T&,S>& other) const {
@@ -358,7 +358,7 @@ struct const_iterator<C,T&,S> {
     return *this;
   }
 
-  friend class iterator_tpl::iterator<C,T&,S>;
+  friend struct iterator_tpl::iterator<C,T&,S>;
 
   // Comparisons between const and normal iterators:
   bool operator!=(const iterator<C,T&,S>& other) const {
