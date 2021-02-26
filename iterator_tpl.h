@@ -7,39 +7,45 @@ namespace iterator_tpl {
 // - `iterator`
 // - `const_iterator`:
 // As members of your class
-#define SETUP_ITERATORS(C, T, S)  \
-  SETUP_MUTABLE_ITERATOR(C, T, S) \
-  SETUP_CONST_ITERATOR(C, T, S)
+#define SETUP_ITERATORS(C, T, S) VGSI_SETUP_ITERATORS(C, T, S)
+#define VGSI_SETUP_ITERATORS(C, T, S)  \
+  VGSI_SETUP_MUTABLE_ITERATOR(C, T, S) \
+  VGSI_SETUP_CONST_ITERATOR(C, T, S)
 
 // Use this define to declare only `iterator`
-#define SETUP_MUTABLE_ITERATOR(C, T, S)              \
+#define SETUP_MUTABLE_ITERATOR(C, T, S) VGSI_SETUP_MUTABLE_ITERATOR(C, T, S)
+#define VGSI_SETUP_MUTABLE_ITERATOR(C, T, S)              \
   typedef iterator_tpl::iterator<C, T, S> iterator;  \
   iterator begin() { return iterator::begin(this); } \
   iterator end()   { return iterator::end(this);   }
 
 // Use this define to declare only `const_iterator`
-#define SETUP_CONST_ITERATOR(C, T, S)                                  \
+#define SETUP_CONST_ITERATOR(C, T, S) VGSI_SETUP_CONST_ITERATOR(C, T, S)
+#define VGSI_SETUP_CONST_ITERATOR(C, T, S)                             \
   typedef iterator_tpl::const_iterator<C, T, S> const_iterator;        \
   const_iterator begin() const { return const_iterator::begin(this); } \
   const_iterator end()   const { return const_iterator::end(this);   }
 
 // S should be the state struct used to forward iteration:
-#define SETUP_REVERSE_ITERATORS(C, T, S)                            \
+#define SETUP_REVERSE_ITERATORS(C, T, S) VGSI_SETUP_REVERSE_ITERATORS(C, T, S)
+#define VGSI_SETUP_REVERSE_ITERATORS(C, T, S)                       \
   struct S##_reversed : public S {                                  \
     inline void next (const C* ref) { S::prev(ref); }               \
     inline void prev (const C* ref) { S::next(ref); }               \
     inline void begin(const C* ref) { S::end(ref); S::prev(ref);}   \
     inline void end  (const C* ref) { S::begin(ref); S::prev(ref);} \
   };                                                                \
-  SETUP_MUTABLE_RITERATOR(C, T, S)                                  \
-  SETUP_CONST_RITERATOR(C, T, S)
+  VGSI_SETUP_MUTABLE_RITERATOR(C, T, S)                                  \
+  VGSI_SETUP_CONST_RITERATOR(C, T, S)
 
-#define SETUP_MUTABLE_RITERATOR(C, T, S) \
+#define SETUP_MUTABLE_RITERATOR(C, T, S) VGSI_SETUP_MUTABLE_RITERATOR(C, T, S)
+#define VGSI_SETUP_MUTABLE_RITERATOR(C, T, S)                           \
   typedef iterator_tpl::iterator<C, T, S##_reversed > reverse_iterator; \
   reverse_iterator rbegin() { return reverse_iterator::begin(this); }   \
   reverse_iterator rend()   { return reverse_iterator::end(this); }     \
 
-#define SETUP_CONST_RITERATOR(C, T, S)                                              \
+#define SETUP_CONST_RITERATOR(C, T, S) VGSI_SETUP_CONST_RITERATOR(C, T, S)
+#define VGSI_SETUP_CONST_RITERATOR(C, T, S)                                         \
   typedef iterator_tpl::const_iterator<C, T, S##_reversed > const_reverse_iterator; \
   const_reverse_iterator rbegin() const {                                           \
     return const_reverse_iterator::begin(this);                                     \
@@ -48,7 +54,8 @@ namespace iterator_tpl {
     return const_reverse_iterator::end(this);                                       \
   }
 
-#define STL_TYPEDEFS(T)                    \
+#define STL_TYPEDEFS(T) VGSI_STL_TYPEDEFS(T)
+#define VGSI_STL_TYPEDEFS(T)               \
   typedef std::ptrdiff_t difference_type;  \
   typedef size_t size_type;                \
   typedef T value_type;                    \
