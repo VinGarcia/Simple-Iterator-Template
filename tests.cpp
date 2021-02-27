@@ -19,7 +19,7 @@ struct myClass {
     inline void end(const myClass* ref) { pos = ref->vec.size(); }
     inline float& get(myClass* ref) { return ref->vec[pos]; }
     inline const float& get(const myClass* ref) const { return ref->vec[pos]; }
-    inline bool cmp(const it_state& s) const { return pos != s.pos; }
+    inline bool equals(const it_state& s) const { return pos == s.pos; }
   };
   SETUP_ITERATORS(myClass, float&, it_state);
   SETUP_REVERSE_ITERATORS(myClass, float&, it_state);
@@ -38,7 +38,7 @@ struct myClass_rvalue {
     inline void end(const myClass_rvalue* ref) { pos = ref->vec.size(); }
     inline float get(myClass_rvalue* ref) { return ref->vec[pos] - 1; }
     inline const float get(const myClass_rvalue* ref) { return ref->vec[pos] - 1; }
-    inline bool cmp(const it_state& s) const { return pos != s.pos; }
+    inline bool equals(const it_state& s) const { return pos == s.pos; }
   };
   SETUP_ITERATORS(myClass_rvalue, float, it_state);
   SETUP_REVERSE_ITERATORS(myClass_rvalue, float, it_state);

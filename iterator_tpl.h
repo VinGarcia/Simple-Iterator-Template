@@ -86,7 +86,7 @@ struct iterator {
   // Returns current `value`
   T get() { return state.get(ref); }
   // Return true if `state != s`:
-  bool cmp(const S& s) const { return state.cmp(s); }
+  bool equals(const S& s) const { return state.equals(s); }
 
   // Optional function for reverse iteration:
   void prev() { state.prev(ref); }
@@ -118,7 +118,7 @@ struct iterator {
   iterator& operator--() { prev(); return *this; }
   iterator operator--(int) { iterator temp(*this); prev(); return temp; }
   bool operator!=(const iterator& other) const {
-    return ref != other.ref || cmp(other.state);
+    return ref != other.ref || !equals(other.state);
   }
   bool operator==(const iterator& other) const {
     return !operator!=(other);
@@ -155,7 +155,7 @@ struct iterator<C,T&,S> {
   // Returns current `value`
   T& get() { return state.get(ref); }
   // Return true if `state != s`:
-  bool cmp(const S& s) const { return state.cmp(s); }
+  bool equals(const S& s) const { return state.equals(s); }
 
   // Optional function for reverse iteration:
   void prev() { state.prev(ref); }
@@ -188,7 +188,7 @@ struct iterator<C,T&,S> {
   iterator& operator--() { prev(); return *this; }
   iterator operator--(int) { iterator temp(*this); prev(); return temp; }
   bool operator!=(const iterator& other) const {
-    return ref != other.ref || cmp(other.state);
+    return ref != other.ref || !equals(other.state);
   }
   bool operator==(const iterator& other) const {
     return !operator!=(other);
@@ -230,7 +230,7 @@ struct const_iterator {
   // Returns current `value`
   const T get() { return state.get(ref); }
   // Return true if `state != s`:
-  bool cmp(const S& s) const { return state.cmp(s); }
+  bool equals(const S& s) const { return state.equals(s); }
 
   // Optional function for reverse iteration:
   void prev() { state.prev(ref); }
@@ -267,7 +267,7 @@ struct const_iterator {
   const_iterator& operator--() { prev(); return *this; }
   const_iterator operator--(int) { const_iterator temp(*this); prev(); return temp;  }
   bool operator!=(const const_iterator& other) const {
-    return ref != other.ref || cmp(other.state);
+    return ref != other.ref || !equals(other.state);
   }
   bool operator==(const const_iterator& other) const {
     return !operator!=(other);
@@ -282,7 +282,7 @@ struct const_iterator {
 
   // Comparisons between const and normal iterators:
   bool operator!=(const iterator<C,T,S>& other) const {
-    return ref != other.ref || cmp(other.state);
+    return ref != other.ref || !equals(other.state);
   }
   bool operator==(const iterator<C,T,S>& other) const {
     return !operator!=(other);
@@ -309,7 +309,7 @@ struct const_iterator<C,T&,S> {
   // Returns current `value`
   const T& get() { return state.get(ref); }
   // Return true if `state != s`:
-  bool cmp(const S& s) const { return state.cmp(s); }
+  bool equals(const S& s) const { return state.equals(s); }
 
   // Optional function for reverse iteration:
   void prev() { state.prev(ref); }
@@ -347,7 +347,7 @@ struct const_iterator<C,T&,S> {
   const_iterator& operator--() { prev(); return *this; }
   const_iterator operator--(int) { const_iterator temp(*this); prev(); return temp; }
   bool operator!=(const const_iterator& other) const {
-    return ref != other.ref || cmp(other.state);
+    return ref != other.ref || !equals(other.state);
   }
   bool operator==(const const_iterator& other) const {
     return !operator!=(other);
@@ -362,7 +362,7 @@ struct const_iterator<C,T&,S> {
 
   // Comparisons between const and normal iterators:
   bool operator!=(const iterator<C,T&,S>& other) const {
-    return ref != other.ref || cmp(other.state);
+    return ref != other.ref || !equals(other.state);
   }
   bool operator==(const iterator<C,T&,S>& other) const {
     return !operator!=(other);
