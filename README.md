@@ -290,3 +290,17 @@ int main() {
   return 0;
 }
 ```
+
+## Macro Colisions:
+
+For having a way to avoid macro colisions a new version of the macros was
+created, so for every macro you see on the examples you can also use the
+fullnamed version below if macro colisions is a concern:
+
+- `VGSI_SETUP_ITERATORS(C, T, S)`
+- `VGSI_SETUP_MUTABLE_ITERATOR(C, T, S)`
+- `VGSI_SETUP_CONST_ITERATOR(C, T, S)`
+- `VGSI_SETUP_REVERSE_ITERATORS(C, T, S)`
+- `VGSI_SETUP_MUTABLE_RITERATOR(C, T, S)`
+- `VGSI_SETUP_CONST_RITERATOR(C, T, S)`
+- `VGSI_STL_TYPEDEFS(T)`
