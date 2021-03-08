@@ -18,10 +18,12 @@ namespace iterator_tpl {
   iterator end()   { return iterator::end(this);   }
 
 // Use this define to declare only `const_iterator`
-#define VGSI_SETUP_CONST_ITERATOR(C, T, S)                             \
-  typedef iterator_tpl::const_iterator<C, T, S> const_iterator;        \
-  const_iterator begin() const { return const_iterator::begin(this); } \
-  const_iterator end()   const { return const_iterator::end(this);   }
+#define VGSI_SETUP_CONST_ITERATOR(C, T, S)                              \
+  typedef iterator_tpl::const_iterator<C, T, S> const_iterator;         \
+  const_iterator begin() const { return const_iterator::begin(this); }  \
+  const_iterator end()   const { return const_iterator::end(this);   }  \
+  const_iterator cbegin() const { return const_iterator::begin(this); } \
+  const_iterator cend()   const { return const_iterator::end(this);   }
 
 // S should be the state struct used to forward iteration:
 #define VGSI_SETUP_REVERSE_ITERATORS(C, T, S)                       \
@@ -45,6 +47,12 @@ namespace iterator_tpl {
     return const_reverse_iterator::begin(this);                                     \
   }                                                                                 \
   const_reverse_iterator rend() const {                                             \
+    return const_reverse_iterator::end(this);                                       \
+  }                                                                                 \
+  const_reverse_iterator crbegin() const {                                          \
+    return const_reverse_iterator::begin(this);                                     \
+  }                                                                                 \
+  const_reverse_iterator crend() const {                                            \
     return const_reverse_iterator::end(this);                                       \
   }
 
