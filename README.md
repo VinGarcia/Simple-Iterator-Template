@@ -37,7 +37,7 @@ struct myClass {
     inline void end(const myClass* ref) { pos = ref->vec.size(); }
     inline float& get(myClass* ref) { return ref->vec[pos]; }
     inline const float& get(const myClass* ref) { return ref->vec[pos]; }
-    inline bool cmp(const it_state& s) const { return pos != s.pos; }
+    inline bool equals(const it_state& s) const { return pos == s.pos; }
   };
   SETUP_ITERATORS(myClass, float&, it_state);
 };
@@ -88,7 +88,7 @@ struct myClass {
     inline void end(const myClass* ref) { pos = ref->vec.size(); }
     inline float& get(myClass* ref) { return ref->vec[pos]; }
     inline const float& get(const myClass* ref) { return ref->vec[pos]; }
-    inline bool cmp(const it_state& s) const { return pos != s.pos; }
+    inline bool equals(const it_state& s) const { return pos == s.pos; }
   };
   SETUP_ITERATORS(myClass, float&, it_state);
   SETUP_REVERSE_ITERATORS(myClass, float&, it_state); // <-- Add REVERSE_ITERATORS macro
@@ -149,7 +149,7 @@ would not be possible, e.g.:
     inline void end(const myClass* ref) { pos = ref->vec.size(); }
     inline float get(myClass* ref) { return 1 + ref->vec[pos]; }
     inline const float get(const myClass* ref) { return 1 + ref->vec[pos]; }
-    inline bool cmp(const it_state& s) const { return pos != s.pos; }
+    inline bool equals(const it_state& s) const { return pos == s.pos; }
   };
 ```
 
@@ -170,7 +170,7 @@ struct myClass {
     inline void end(const myClass* ref) { pos = ref->vec.size(); }
     inline float& get(myClass* ref) { return ref->vec[pos]; }
     inline const float& get(const myClass* ref) { return ref->vec[pos]; }
-    inline bool cmp(const it_state& s) const { return pos != s.pos; }
+    inline bool equals(const it_state& s) const { return pos == s.pos; }
   };
   SETUP_ITERATORS(myClass, float&, it_state);
   SETUP_REVERSE_ITERATORS(myClass, float&, it_state); // (Optional)
@@ -213,7 +213,7 @@ struct myClass {
     inline void end(const myClass* ref) { pos = ref->vec.size(); }
     inline float& get(myClass* ref) { return ref->vec[pos]; }
     inline const float& get(const myClass* ref) { return ref->vec[pos]; }
-    inline bool cmp(const it_state& s) const { return pos != s.pos; }
+    inline bool equals(const it_state& s) const { return pos == s.pos; }
   };
 
   // Mutable Iterator:
