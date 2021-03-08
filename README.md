@@ -2,6 +2,21 @@
 
 Provides a header-only C++ iterator template that is easy to adapt for any custom container.
 
+## Change Log:
+
+Recently PR #14 was merged, and it adds a backward-incompatible change:
+
+- Now instead of defining the function `cmp` for the iterators the template
+  expects a function `equals` that semantically means `!cmp()`
+
+The reason for that is because it was argued that the behavior where cmp would
+return true when the iterators were different was not obvious and was prone to
+causing implementation errors.
+
+This backward-incompatible change should be a one-off since there aren't all that
+many things to change in this template, but I thought this was important enough for that,
+I am hoping this won't cause much trouble for the people already using the library.
+
 ## Features:
 
 - Single header.
