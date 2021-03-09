@@ -1,3 +1,25 @@
+// MIT License
+//
+// Copyright (c) 2017 Vinícius Garcia (vingarcia00@gmail.com)
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
 #ifndef _iterator_tpl_h_
 #define _iterator_tpl_h_
 
@@ -18,10 +40,12 @@ namespace iterator_tpl {
   iterator end()   { return iterator::end(this);   }
 
 // Use this define to declare only `const_iterator`
-#define VGSI_SETUP_CONST_ITERATOR(C, T, S)                             \
-  typedef iterator_tpl::const_iterator<C, T, S> const_iterator;        \
-  const_iterator begin() const { return const_iterator::begin(this); } \
-  const_iterator end()   const { return const_iterator::end(this);   }
+#define VGSI_SETUP_CONST_ITERATOR(C, T, S)                              \
+  typedef iterator_tpl::const_iterator<C, T, S> const_iterator;         \
+  const_iterator begin() const { return const_iterator::begin(this); }  \
+  const_iterator end()   const { return const_iterator::end(this);   }  \
+  const_iterator cbegin() const { return const_iterator::begin(this); } \
+  const_iterator cend()   const { return const_iterator::end(this);   }
 
 // S should be the state struct used to forward iteration:
 #define VGSI_SETUP_REVERSE_ITERATORS(C, T, S)                       \
@@ -45,6 +69,12 @@ namespace iterator_tpl {
     return const_reverse_iterator::begin(this);                                     \
   }                                                                                 \
   const_reverse_iterator rend() const {                                             \
+    return const_reverse_iterator::end(this);                                       \
+  }                                                                                 \
+  const_reverse_iterator crbegin() const {                                          \
+    return const_reverse_iterator::begin(this);                                     \
+  }                                                                                 \
+  const_reverse_iterator crend() const {                                            \
     return const_reverse_iterator::end(this);                                       \
   }
 
