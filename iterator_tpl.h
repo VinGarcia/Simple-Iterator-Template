@@ -188,7 +188,7 @@ struct iterator {
 
   // Comparisons between const and normal iterators:
   bool operator!=(const const_iterator<C,T,S>& other) const {
-    return ref != other.ref || cmd(other.state);
+    return ref != other.ref || !equals(other.state);
   }
   bool operator==(const const_iterator<C,T,S>& other) const {
     return !operator!=(other);
@@ -258,7 +258,7 @@ struct iterator<C,T&,S> {
 
   // Comparisons between const and normal iterators:
   bool operator!=(const const_iterator<C,T&,S>& other) const {
-    return ref != other.ref || cmd(other.state);
+    return ref != other.ref || !equals(other.state);
   }
   bool operator==(const const_iterator<C,T&,S>& other) const {
     return !operator!=(other);
