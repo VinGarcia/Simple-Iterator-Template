@@ -37,7 +37,7 @@ struct Shape {
 
     inline void end(const Shape* ref) { pos = ref->vec.size(); }
     inline Point& get(Shape* ref) { return ref->vec[pos]; }
-    inline bool cmp(const it_state& s) const { return pos != s.pos; }
+    inline bool equals(const it_state& s) const { return pos == s.pos; }
 
     // Optional for const_iterator to work:
     inline const Point& get(const Shape* ref) { return ref->vec[pos]; }

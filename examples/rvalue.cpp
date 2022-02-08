@@ -30,7 +30,7 @@ struct Piece {
     inline void begin(const Piece* ref) { pos = 0; }
     inline void end(const Piece* ref) { pos = ref->shape.vec.size(); }
     inline Point get(Piece* ref) { return ref->offset + ref->shape.vec[pos]; }
-    inline bool cmp(const it_state& s) const { return pos != s.pos; }
+    inline bool equals(const it_state& s) const { return pos == s.pos; }
   };
   SETUP_ITERATORS(Piece, Point, it_state);
 };

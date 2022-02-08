@@ -14,7 +14,7 @@ struct myClass {
     inline void next(const myClass* ref) { ++pos; }
     inline void end(const myClass* ref) { pos = ref->vec.size(); }
     inline float& get(myClass* ref) { return ref->vec[pos]; }
-    inline bool cmp(const it_state& s) const { return pos != s.pos; }
+    inline bool equals(const it_state& s) const { return pos == s.pos; }
 
     // Optional to allow operator--() and reverse iterators:
     inline void prev(const myClass* ref) { --pos; }
